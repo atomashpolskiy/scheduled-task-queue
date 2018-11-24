@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.erizo.gradle:jcstress-gradle-plugin:0.8.1-SNAPSHOT"
+    }
+}
+
+plugins {
+    id "com.github.johnrengelman.shadow" version "4.0.3"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: "com.github.erizo.gradle.jcstress"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.slf4j:slf4j-api:${slf4jVersion}"
+    compile "org.openjdk.jcstress:jcstress-core:${jcstressVersion}"
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.slf4j:slf4j-simple:${slf4jVersion}"
+}
+
+sourceSets {
+    jcstress {
+        java {
+            srcDirs = ['src/jcstress/java']
+        }
+    }
+}
+
+jcstress {
+    jcstressDependency "org.openjdk.jcstress:jcstress-core:${jcstressVersion}"
+}
